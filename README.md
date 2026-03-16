@@ -20,7 +20,7 @@ Built on NVIDIA Isaac Sim, it unifies high-fidelity physical interaction from In
 - **More task-aligned data generation**: LLM-driven task and instruction generation with task-oriented scene graphs (ToSG), producing structured scenes and rich multi-modal annotations (boxes, keypoints, trajectories) for complex instruction-following and spatial reasoning.
 - **More efficient large-scale production**: Nimbus-powered asynchronous pipelines that decouple planning, rendering, and storage, achieving 2–3× end-to-end throughput, cluster-level load balancing and fault tolerance for billion-scale data generation.
 
-## 📢 Latest News 🔥
+## 🔥 Latest News 
 
 - **[2026/03]** We release the InternDataEngine codebase, which includes the core modules: InternData-A1, Nimbus, and InternData-M1.
 
