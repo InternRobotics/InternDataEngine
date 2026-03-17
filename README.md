@@ -1,6 +1,6 @@
 <div align="center">
 
-# InternDataEngine: A simulation-based data generation engine designed for robotic learning.
+# InternDataEngine: Pioneering High-Fidelity Synthetic Data Generator for Robotic Manipulation
 
 </div>
 
@@ -29,7 +29,7 @@ InternDataEngine is a synthetic data generation engine for embodied AI that powe
 
 ## 🔥 Latest News
 
-- **[2026/03]** We release the InternDataEngine codebase, which includes the core modules: InternData-A1, Nimbus, and InternData-M1.
+- **[2026/03]** We release the InternDataEngine codebase v1.0, which includes the core modules: InternData-A1 and Nimbus.
 
 ## 🚀 Quickstart
 

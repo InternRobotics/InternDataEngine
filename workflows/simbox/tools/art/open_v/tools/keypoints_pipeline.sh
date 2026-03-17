@@ -1,7 +1,7 @@
 #!/bin/bash
-CONFIG_PATH="/home/shixu/dev_shixu/DataEngine/workflows/simbox/tools/art/open_v/7265/usd/keypoints_config.json"
+CONFIG_PATH="YOUR_PATH_TO/keypoints_config.json"
 
-cd /home/shixu/dev_shixu/DataEngine/workflows/simbox/tools/art/open_v/tools
+cd workflows/simbox/tools/art/open_v/tools
 
 # 1. rehier
 python rehier.py --config $CONFIG_PATH

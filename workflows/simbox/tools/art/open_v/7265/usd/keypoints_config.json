@@ -1,5 +1,5 @@
 {
-    "DIR": "/home/shixu/dev_shixu/DataEngine/workflows/simbox/tools/art/open_v/7265/usd",
+    "DIR": "YOU_PARENT_DIR_OF_USD",
     "USD_NAME": "microwave_0.usd",
     "INSTANCE_NAME": "microwave7265",
     "link0_initial_prim_path": "/root/group_18",

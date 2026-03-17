@@ -6,7 +6,7 @@ We provide an optimized and simplified annotation pipeline that removes many red
 
 | Configuration | Example | Description |
 |---------------|---------|-------------|
-| **DIR** | `/home/shixu/Downloads/peixun/7265/usd` | Directory where USD files are stored |
+| **DIR** | `YOUR_PATH_TO_DIR/usd` | Directory where USD files are stored |
 | **USD_NAME** | `microwave_0.usd` | Scene description file name |
 | **INSTANCE_NAME** | `microwave7265` | Model identifier in the scene. You can name it yourself, preferably matching the generated file name |
 
