@@ -126,7 +126,6 @@ tasks:
                       cross_target_axis1_from_keypoint_name: articulated_object_head
                       cross_target_axis1_to_keypoint_name: articulated_object_tail
                       target_axis: link0_contact_axis
-                      target_axis_frame: object # cross_target_axis2_frame
                       tolerance: 0.0005
                       target_inner_product: -1
                       type: frame_axis_parallel # enforce parallelism via cross product constraint

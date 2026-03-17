@@ -153,7 +153,6 @@ tasks:
                       cross_target_axis1_from_keypoint_name: articulated_object_head
                       cross_target_axis1_to_keypoint_name: articulated_object_tail
                       target_axis: link0_contact_axis
-                      target_axis_frame: object    # cross_target_axis2_frame
                       tolerance: 0.05
                       target_inner_product: 1.0
                       type: frame_axis_parallel  # enforce parallelism via cross product constraint
@@ -223,7 +222,6 @@ tasks:
                       cross_target_axis1_from_keypoint_name: articulated_object_head
                       cross_target_axis1_to_keypoint_name: articulated_object_tail
                       target_axis: link0_contact_axis
-                      target_axis_frame: object    # cross_target_axis2_frame
                       tolerance: 0.05
                       target_inner_product: 1.0
                       type: frame_axis_parallel  # enforce parallelism via cross product constraint
@@ -293,7 +291,6 @@ tasks:
                       cross_target_axis1_from_keypoint_name: articulated_object_head
                       cross_target_axis1_to_keypoint_name: articulated_object_tail
                       target_axis: link0_contact_axis
-                      target_axis_frame: object    # cross_target_axis2_frame
                       tolerance: 0.05
                       target_inner_product: 1.0
                       type: frame_axis_parallel  # enforce parallelism via cross product constraint
@@ -349,24 +346,11 @@ tasks:
                       type: point2point_constraint
                       name: fingers_contact_with_link0
 
-                    # ensure surface of the gripper to be parallel to the box lid
-                    # - axis_from_keypoint_name: tool_head
-                    #   axis_to_keypoint_name: tool_side
-                    #   cross_target_axis1_from_keypoint_name: articulated_object_head
-                    #   cross_target_axis1_to_keypoint_name: articulated_object_tail
-                    #   target_axis: link0_contact_axis
-                    #   target_axis_frame: object
-                    #   tolerance: 0.1
-                    #   target_inner_product: -1
-                    #   type: frame_axis_parallel
-                    #   name: hand_parallel_to_link0_edge_door
-
                     - axis_from_keypoint_name: tool_head
                       axis_to_keypoint_name: tool_tail
                       cross_target_axis1_from_keypoint_name: articulated_object_head
                       cross_target_axis1_to_keypoint_name: articulated_object_tail
                       target_axis: link0_contact_axis
-                      target_axis_frame: object    # cross_target_axis2_frame
                       tolerance: 0.05
                       target_inner_product: 1.0
                       type: frame_axis_parallel  # enforce parallelism via cross product constraint

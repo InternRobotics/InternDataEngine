@@ -130,7 +130,6 @@ tasks:
                     - axis_from_keypoint_name: tool_head
                       axis_to_keypoint_name: tool_side
                       target_axis: object_link0_contact_axis
-                      target_axis_frame: object
                       tolerance: 0.0005
                       target_inner_product: -1
                       type: frame_axis_parallel
@@ -139,7 +138,6 @@ tasks:
                     - axis_from_keypoint_name: tool_tail
                       axis_to_keypoint_name: tool_head
                       target_axis: object_link0_move_axis
-                      target_axis_frame: object
                       tolerance: 0.3
                       target_inner_product: 1
                       type: frame_axis_parallel
