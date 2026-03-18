@@ -41,7 +41,7 @@ info() { echo -e "\033[32m[INFO]\033[0m $*"; }
 
 download() {
     info "Downloading $2 ..."
-    huggingface-cli download "$REPO_ID" --repo-type "$REPO_TYPE" --include "$1" --local-dir "$LOCAL_DIR"
+    hf download "$REPO_ID" --repo-type "$REPO_TYPE" --include "$1" --local-dir "$LOCAL_DIR"
 }
 
 # --- Scene assets: required (both modes) ---

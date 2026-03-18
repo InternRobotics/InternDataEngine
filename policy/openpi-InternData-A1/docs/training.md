@@ -40,7 +40,7 @@ python scripts/download_paligemma.py
 You may adjust other training parameters based on your available GPUs and training budget:
 - `num_train_steps`: Total number of training steps
 - `num_workers`: Number of data loading workers
-- `fsdp_devices`: Number of GPUs per node
+- `fsdp_devices`: Number of GPUs used for FSDP per node to distribute model parameters, gradients, and optimizer states across devices for reduced memory usage
 - `batch_size`: Batch size per GPU
 - `save_interval`: Checkpoint saving interval (in steps)
 

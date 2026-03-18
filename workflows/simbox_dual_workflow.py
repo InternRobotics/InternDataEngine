@@ -168,6 +168,8 @@ class SimBoxDualWorkFlow(NimbusWorkFlow):
             collect_info=self.task_cfg["data"]["collect_info"],
             version=self.task_cfg["data"].get("version", "v1.0"),
         )
+        # Motion vectors are large dense tensors; keep LMDB logging opt-in.
+        self.log_motion_vectors = bool(self.task_cfg["data"].get("log_motion_vectors", False))
 
         if self.random_seed is not None:
             seed = self.random_seed
@@ -530,16 +532,71 @@ class SimBoxDualWorkFlow(NimbusWorkFlow):
         for key, value in self.task.cameras.items():
             for robot_name, _ in self.task.robots.items():
                 if robot_name in key:
-                    rgb_img = value.get_observations()["color_image"]
+                    camera_obs = value.get_observations()
+                    rgb_img = camera_obs["color_image"]
                     # Special processing if enabled
-                    camera2env_pose = value.get_observations()["camera2env_pose"]
+                    camera2env_pose = camera_obs["camera2env_pose"]
                     save_camera_name = key.replace(f"{robot_name}_", "")
-                    self.logger.add_color_image(robot_name, "images.rgb." + save_camera_name, rgb_img)
-                    self.logger.add_scalar_data(robot_name, "camera2env_pose." + save_camera_name, camera2env_pose)
+                    self.logger.add_color_image(
+                        robot_name, "images.rgb." + save_camera_name, rgb_img, step_idx=step_idx
+                    )
+                    if "depth_image" in camera_obs:
+                        depth_image = camera_obs["depth_image"]
+                        depth_img = np.nan_to_num(depth_img, nan=0.0, posinf=0.0, neginf=0.0)
+                        self.logger.add_depth_image(
+                            robot_name, "images.depth." + save_camera_name, depth_img, step_idx=step_idx
+                        )
+                    if "semantic_mask" in camera_obs:
+                        self.logger.add_seg_image(
+                            robot_name, "images.seg." + save_camera_name, seg_mask, step_idx=step_idx
+                        )
+                        if "semantic_mask_id2labels" in camera_obs:
+                            self.logger.add_scalar_data(
+                                robot_name,
+                                "labels.seg." + save_camera_name,
+                                camera_obs["semantic_mask_id2labels"],
+                            )
+                    if "bbox2d_tight" in camera_obs:
+                        self.logger.add_scalar_data(
+                            robot_name, "labels.bbox2d_tight." + save_camera_name, camera_obs["bbox2d_tight"]
+                        )
+                    if "bbox2d_tight_id2labels" in camera_obs:
+                        self.logger.add_scalar_data(
+                            robot_name,
+                            "labels.bbox2d_tight_id2labels." + save_camera_name,
+                            camera_obs["bbox2d_tight_id2labels"],
+                        )
+                    if "bbox2d_loose" in camera_obs:
+                        self.logger.add_scalar_data(
+                            robot_name, "labels.bbox2d_loose." + save_camera_name, camera_obs["bbox2d_loose"]
+                        )
+                    if "bbox2d_loose_id2labels" in camera_obs:
+                        self.logger.add_scalar_data(
+                            robot_name,
+                            "labels.bbox2d_loose_id2labels." + save_camera_name,
+                            camera_obs["bbox2d_loose_id2labels"],
+                        )
+                    if "bbox3d" in camera_obs:
+                        self.logger.add_scalar_data(
+                            robot_name, "labels.bbox3d." + save_camera_name, camera_obs["bbox3d"]
+                        )
+                    if "bbox3d_id2labels" in camera_obs:
+                        self.logger.add_scalar_data(
+                            robot_name,
+                            "labels.bbox3d_id2labels." + save_camera_name,
+                            camera_obs["bbox3d_id2labels"],
+                        )
+                    if self.log_motion_vectors and "motion_vectors" in camera_obs:
+                        self.logger.add_scalar_data(
+                            robot_name, "labels.motion_vectors." + save_camera_name, camera_obs["motion_vectors"]
+                        )
+                    self.logger.add_scalar_data(
+                        robot_name, "camera2env_pose." + save_camera_name, camera2env_pose
+                    )
                     if step_idx == 0:
                         save_camera_name = key.replace(f"{robot_name}_", "")
                         self.logger.add_json_data(
-                            robot_name, f"{save_camera_name}_camera_params", value.get_observations()["camera_params"]
+                            robot_name, f"{save_camera_name}_camera_params", camera_obs["camera_params"]
                         )
 
                     # depth_img = get_src(value, "depth")

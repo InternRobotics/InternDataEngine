@@ -202,8 +202,6 @@ python scripts/train_jax_multinode.py \
     pretrain-interndata-a1 \
   --exp-name=pretrain-interndata-a1 \
   --num_workers=12 \
-  --fsdp_devices=8 \
   --batch_size=512 \
   --num_train_steps=2000000 \
   --save_interval=5000
-

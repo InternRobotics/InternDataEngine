@@ -27,6 +27,10 @@ class BaseLogger(ABC):
         self.object_data_logger: Dict[str, List[Any]] = {}
         self.color_image_logger: Dict[str, List[Any]] = {}
         self.depth_image_logger: Dict[str, List[Any]] = {}
+        self.seg_image_logger: Dict[str, List[Any]] = {}
+        self.color_image_step_logger: Dict[str, List[Any]] = {}
+        self.depth_image_step_logger: Dict[str, List[Any]] = {}
+        self.seg_image_step_logger: Dict[str, List[Any]] = {}
 
     def update_tpi_initial_info(self, tpi_initial_info):
         self.tpi_initial_info = tpi_initial_info
@@ -67,17 +71,50 @@ class BaseLogger(ABC):
             self.scalar_data_logger[robot][key] = []
         self.scalar_data_logger[robot][key].append(value)
 
-    def add_color_image(self, robot, key, value):
-        if robot not in self.color_image_logger:
-            self.color_image_logger[robot] = {}
-        if key not in self.color_image_logger[robot]:
-            self.color_image_logger[robot][key] = []
-        self.color_image_logger[robot][key].append(value)
+    def _add_image_data(self, data_logger, step_logger, robot, key, value, step_idx=None):
+        if robot not in data_logger:
+            data_logger[robot] = {}
+        if key not in data_logger[robot]:
+            data_logger[robot][key] = []
+        data_logger[robot][key].append(value)
 
-    # def add_depth_image(self, key, value):
-    #     if key not in self.depth_image_logger:
-    #         self.depth_image_logger[key] = []
-    #     self.depth_image_logger[key].append(value)
+        if robot not in step_logger:
+            step_logger[robot] = {}
+        if key not in step_logger[robot]:
+            step_logger[robot][key] = []
+        if step_idx is None:
+            step_idx = len(data_logger[robot][key]) - 1
+        step_logger[robot][key].append(int(step_idx))
+
+    def add_color_image(self, robot, key, value, step_idx=None):
+        self._add_image_data(
+            self.color_image_logger,
+            self.color_image_step_logger,
+            robot,
+            key,
+            value,
+            step_idx=step_idx,
+        )
+
+    def add_depth_image(self, robot, key, value, step_idx=None):
+        self._add_image_data(
+            self.depth_image_logger,
+            self.depth_image_step_logger,
+            robot,
+            key,
+            value,
+            step_idx=step_idx,
+        )
+
+    def add_seg_image(self, robot, key, value, step_idx=None):
+        self._add_image_data(
+            self.seg_image_logger,
+            self.seg_image_step_logger,
+            robot,
+            key,
+            value,
+            step_idx=step_idx,
+        )
 
     def clear(
         self,
@@ -97,6 +134,10 @@ class BaseLogger(ABC):
         self.scalar_data_logger = {}
         self.color_image_logger = {}
         self.depth_image_logger = {}
+        self.seg_image_logger = {}
+        self.color_image_step_logger = {}
+        self.depth_image_step_logger = {}
+        self.seg_image_step_logger = {}
 
     @abstractmethod
     def close(self):

@@ -1,6 +1,7 @@
 import numpy as np
 import omni.replicator.core as rep
 from core.cameras.base_camera import register_camera
+from core.utils.camera_utils import get_src
 from omni.isaac.core.prims import XFormPrim
 from omni.isaac.core.utils.prims import get_prim_at_path
 from omni.isaac.core.utils.transformations import (
@@ -40,9 +41,25 @@ class CustomCamera(Camera):
             **kwargs,
         )
         self.initialize()
-        self.add_motion_vectors_to_frame()
-        self.add_semantic_segmentation_to_frame()
-        self.add_distance_to_image_plane_to_frame()
+        self.with_distance = cfg["params"].get("with_distance", True)
+        self.with_semantic = cfg["params"].get("with_semantic", False)
+        self.with_bbox2d = cfg["params"].get("with_bbox2d", False)
+        self.with_bbox3d = cfg["params"].get("with_bbox3d", False)
+        # Motion vectors are high-volume outputs; keep default off unless explicitly enabled in config.
+        self.with_motion_vector = cfg["params"].get("with_motion_vector", False)
+        self.with_depth = cfg["params"].get("depth", False)
+
+        if self.with_distance:
+            self.add_distance_to_image_plane_to_frame()
+        if self.with_semantic:
+            self.add_semantic_segmentation_to_frame()
+        if self.with_bbox2d:
+            self.add_bounding_box_2d_tight_to_frame()
+            self.add_bounding_box_2d_loose_to_frame()
+        if self.with_bbox3d:
+            self.add_bounding_box_3d_to_frame()
+        if self.with_motion_vector:
+            self.add_motion_vectors_to_frame()
 
         # ===== From cfg =====
         pixel_size = cfg["params"].get("pixel_size")
@@ -155,9 +172,27 @@ class CustomCamera(Camera):
 
         obs = {
             "color_image": color_image,
-            "depth_image": self.get_depth(),
             "camera2env_pose": camera2env_pose,
             "camera_params": self.is_camera_matrix.tolist(),
         }
+        if self.with_depth:
+            obs["depth_image"] = get_src(self, "depth"),
 
+        seg_data = get_src(self, "seg")
+        if seg_data is not None:
+            obs["semantic_mask"] = seg_data["mask"]
+            obs["semantic_mask_id2labels"] = seg_data["id2labels"]
+
+        bbox2d_tight = get_src(self, "bbox2d_tight")
+        if bbox2d_tight is not None:
+            obs["bbox2d_tight"], obs["bbox2d_tight_id2labels"] = bbox2d_tight
+        bbox2d_loose = get_src(self, "bbox2d_loose")
+        if bbox2d_loose is not None:
+            obs["bbox2d_loose"], obs["bbox2d_loose_id2labels"] = bbox2d_loose
+        bbox3d = get_src(self, "bbox3d")
+        if bbox3d is not None:
+            obs["bbox3d"], obs["bbox3d_id2labels"] = bbox3d
+        motion_vectors = get_src(self, "motion_vectors")
+        if motion_vectors is not None:
+            obs["motion_vectors"] = motion_vectors
         return obs
